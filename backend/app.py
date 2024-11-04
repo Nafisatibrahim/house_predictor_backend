@@ -82,9 +82,6 @@ def get_clusters():
         print(f"An error occurred: {str(e)}")  # Debug statement
         return jsonify({'error': f"An error occurred: {str(e)}"}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 """
 from flask import Flask, request, jsonify
 from flask_cors import CORS
