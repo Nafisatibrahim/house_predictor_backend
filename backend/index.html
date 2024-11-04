@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Prediction API</title>
+</head>
+<body>
+    <h1>Test Prediction API</h1>
+    <form id="predictionForm">
+        <!-- Core Features -->
+        <label>Bedrooms: <input type="number" name="bedrooms" value="3"></label><br>
+        <label>Bathrooms: <input type="number" name="bathrooms" step="0.5" value="2"></label><br>
+        <label>Sqft Living: <input type="number" name="sqft_living" value="1500"></label><br>
+        <label>Grade: <input type="number" name="grade" value="7"></label><br>
+        <label>Year Built: <input type="number" name="yr_built" value="1990"></label><br>
+        <label>Year Renovated: <input type="number" name="yr_renovated" value="0"></label><br>
+        
+        <!-- New Neighborhood Rank Feature -->
+        <label>Neighborhood Rank: <input type="number" name="neighborhood_rank" value="5"></label><br>
+        
+        <button type="button" onclick="getPrediction()">Get Prediction</button>
+    </form>
+    <p id="result">Prediction Result:</p>
+
+    <script>
+    async function getPrediction() {
+        const form = document.getElementById('predictionForm');
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = isNaN(value) ? value : Number(value);  // Convert to number where applicable
+        });
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            // Format the predicted price with commas and round it to 2 decimal places
+            const formattedPrice = `$${result.predicted_price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            document.getElementById('result').innerText = `Predicted Price: ${formattedPrice}`;
+        } catch (error) {
+            console.error("Error fetching prediction:", error);
+            document.getElementById('result').innerText = "Error: Failed to fetch prediction";
+        }
+    }
+</script>
+
+</body>
+</html>
