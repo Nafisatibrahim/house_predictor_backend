@@ -10,7 +10,7 @@ with open('optimized_rf_model.pkl', 'rb') as f:
 # Initialize Flask app
 app = Flask(__name__)
 #CORS(app)  # Enable CORS for all routes
-CORS(app, origins=["https://nafisatibrahim.github.io"])
+CORS(app, resources={r"/*": {"origins": "https://nafisatibrahim.github.io"}})
 
 # Define feature names and acceptable ranges
 feature_names = ['bedrooms', 'bathrooms', 'sqft_living', 'grade', 
